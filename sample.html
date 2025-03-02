@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h2>Traffic Analysis</h2>
+    <button id="startAnalysis">Start Traffic Analysis</button>
+    <button id="downloadImage">Download Graph as PNG</button>
+
+    <canvas id="trafficChart" width="400" height="200" style="display:none;"></canvas>
+
+    <script>
+        let chart;
+
+        document.getElementById("startAnalysis").addEventListener("click", function() {
+            // Show the canvas and plot the graph
+            document.getElementById("trafficChart").style.display = "block";
+
+            // Example data for traffic analysis
+            const trafficData = {
+                labels: ["10AM", "11AM", "12PM", "1PM", "2PM"], // Time labels
+                datasets: [{
+                    label: 'Traffic Volume',
+                    data: [20, 35, 60, 40, 80], // Traffic volume at each time
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    fill: false
+                }]
+            };
+
+            // Create a chart when the button is clicked
+            const ctx = document.getElementById("trafficChart").getContext("2d");
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: trafficData,
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Time'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Traffic Volume'
+                            }
+                        }
+                    }
+                });
+        });
+
+        document.getElementById("downloadImage").addEventListener("click", function() {
+            // Ensure the chart is created before downloading
+            if (chart) {
+                // Export chart as a PNG image (this is the base64 data URI)
+                const imgData = chart.toBase64Image();
+
+                // Create a temporary link element to trigger the download
+                const link = document.createElement('a');
+                link.href = imgData; // Set the href to the image data
+                link.download = 'traffic_graph.png'; // Name the downloaded file
+                link.click(); // Trigger the download
+            } else {
+                alert("Please start the traffic analysis first.");
+            }
+        });
+    </script>
+</body>
+</html>
